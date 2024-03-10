@@ -1,11 +1,13 @@
 "use client";
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import { FaBars } from 'react-icons/fa6';
 import { AiOutlineClose } from 'react-icons/ai';
 import { GoMoon, GoSun } from 'react-icons/go';
+
+import { ThemeContext } from '@/app/context/ThemeContext';
 
 import styles from './navbar.module.css';
 
@@ -38,6 +40,7 @@ const data = [
 ];
 
 const Navbar = () => {
+    const { theme, setTheme } = useContext(ThemeContext);
     const [open, setOpen] = useState(false);
     const pathname = usePathname();
 
@@ -50,6 +53,14 @@ const Navbar = () => {
     const closeNavHandler = () => {
         if (window.innerWidth <= 600) {
             setOpen(false);
+        }
+    };
+
+    const changeThemeHandler = () => {
+        if (theme === 'light') {
+            setTheme('dark');
+        } else {
+            setTheme('light');
         }
     };
 
@@ -75,8 +86,8 @@ const Navbar = () => {
                 )}
 
                 <div className={styles.navBtns}>
-                    <button className={styles.themeBtn}>
-                        <GoMoon />
+                    <button className={styles.themeBtn} onClick={changeThemeHandler}>
+                        {theme === 'light' ? <GoMoon /> : <GoSun />}
                     </button>
                     <button className={styles.navBtn} onClick={() => setOpen(!open)}>
                         {open ? <AiOutlineClose /> : <FaBars />}
